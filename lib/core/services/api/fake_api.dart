@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:testmovie/core/models/all_movies_ticket.dart';
 import 'package:testmovie/core/models/single_movie_ticket.dart';
 import 'package:testmovie/core/models/tmdb_models.dart';
-import 'package:testmovie/core/models/create_ticket_movie.dart';
+import 'package:testmovie/core/models/main_data.dart';
 import 'package:testmovie/core/models/login.dart';
 import 'package:testmovie/core/models/registiration_data.dart';
 import 'package:testmovie/core/services/api/api.dart';
@@ -53,8 +53,7 @@ class FakeApi implements Api {
 
   UserSignUpData data = UserSignUpData(
     email: 'mohab_31_8@hotmail.com',
-    name: 'mohab',
-    passwordConfirmation: '123456',
+    deviceId: 'mohab',
     password: '123456',
   );
 
@@ -69,7 +68,7 @@ class FakeApi implements Api {
   Future<UserSignUpData> signUp(Map body, BuildContext context) async {
     await Future.delayed(Duration(seconds: 1));
 
-    if (data.name == "mohab") {
+    if (data.deviceId == "mohab") {
       print("great");
     } else if (data.email == "mohab.magdy1@msa.edu.eg") {
       print("fake email");
@@ -77,8 +76,7 @@ class FakeApi implements Api {
       print("signed up succefully");
     }
     return UserSignUpData(
-      passwordConfirmation: "",
-      name: "",
+      deviceId: "",
       email: '',
       password: '',
     );
@@ -91,7 +89,7 @@ class FakeApi implements Api {
   }
 
   @override
-  Future<CreateTicketMovie> createMovieTicket(Map body, BuildContext context) {
+  Future<List<MainData>> getMainData() {
     // TODO: implement createMovie
     return null;
   }

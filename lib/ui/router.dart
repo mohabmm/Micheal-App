@@ -23,8 +23,8 @@ class Router {
       case 'homeview':
         return MaterialPageRoute(builder: (_) => HomeView());
 
-      case 'createTicket':
-        return MaterialPageRoute(builder: (_) => TicketRegistration());
+//      case 'createTicket':
+//        return MaterialPageRoute(builder: (_) => TicketRegistration());
       case 'allmovie':
         return MaterialPageRoute(builder: (_) => AllMovies());
       case 'singlemovie':

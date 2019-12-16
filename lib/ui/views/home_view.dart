@@ -85,100 +85,54 @@ class HomeView extends StatelessWidget {
 
   Widget _getListUi(HomeViewModel model, BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: new Text('Codista Test App')),
-      drawer: new Drawer(
-        child: Container(
-          color: Colors.grey,
-          child: Center(
-            child: new ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                  child: new ListTile(
-                      title: new Text(
-                        "All Movies",
-                        style: TextStyle(
-                          fontSize: 22.0,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, 'allmovie');
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                  child: new ListTile(
-                      title: new Text(
-                        "Sign Out",
-                        style: TextStyle(
-                          fontSize: 22.0,
-                        ),
-                      ),
-                      onTap: () {
-                        model.signOut(context);
-                      }),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
+      appBar: AppBar(title: new Text('Driver Data')),
       body: ListView(
         children: <Widget>[
-          HomeScreeTopPart(),
           Container(
             height: 250,
-            child: new ListView.builder(
-                itemExtent: 120.0,
-                scrollDirection: Axis.horizontal,
-                itemCount: model.movies.results.length,
-                itemBuilder: (BuildContext context, int index) {
-                  String image = model.movies.results[index].posterPath;
-                  String title = model.movies.results[index].title;
+            child:
 
-                  return Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 0.0, horizontal: 12.0),
-                    child: Container(
-                      height: 400.0,
-                      width: 135.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 10.0,
-                                offset: Offset(0.0, 10.0))
-                          ]),
-                      child: Column(
-                        children: <Widget>[
-                          ClipRRect(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20.0),
-                                topRight: Radius.circular(20.0)),
-                            child: Image.network(
-                              image,
-                              width: double.infinity,
-                              height: 130.0,
-                              fit: BoxFit.cover,
-                            ),
+//            new Text("a7a"),
+                new ListView.builder(
+                    itemExtent: 120.0,
+                    scrollDirection: Axis.vertical,
+                    itemCount: model.posts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      String deviceId = model.posts[index].device_id;
+                      String alcoholDetection =
+                          model.posts[index].alcohol_detection;
+                      String bloodOxygen = model.posts[index].blood_oxygen;
+                      String latitude = model.posts[index].location_lat;
+                      String longitude = model.posts[index].location_long;
+                      String imageDescription =
+                          model.posts[index].picture_description;
+                      String pictureRef = model.posts[index].picture_ref;
+                      String pulseRate = model.posts[index].pulse_rate;
+                      String temperature = model.posts[index].temperature_c;
+
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 0.0, horizontal: 12.0),
+                        child: Container(
+                          height: 400.0,
+                          width: 135.0,
+                          child: Column(
+                            children: <Widget>[
+                              new Text(deviceId),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 4.0, left: 8.0, right: 8.0),
+                                child: Text(bloodOxygen,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontFamily: "SF-Pro-Display-Bold")),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 4.0, left: 8.0, right: 8.0),
-                            child: Text(title,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontFamily: "SF-Pro-Display-Bold")),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
+                        ),
+                      );
+                    }),
           ),
         ],
       ),

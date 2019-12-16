@@ -30,39 +30,34 @@ class Registration {
 }
 
 class UserSignUpData {
-  String name;
+  String deviceId;
   String password;
   String email;
-  String passwordConfirmation;
 
   UserSignUpData({
-    this.name,
+    this.deviceId,
     this.password,
     this.email,
-    this.passwordConfirmation,
   });
 
   factory UserSignUpData.fromJson(Map<String, dynamic> json) => UserSignUpData(
-        name: json["name"],
+        deviceId: json["device_id"],
         email: json["email"],
         password: json["password"],
-        passwordConfirmation: json["password confirmation"],
       );
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map["name"] = name;
+    map["device_id"] = deviceId;
     map["email"] = email;
     map["password"] = password;
-    map["password confirmation"] = passwordConfirmation;
     return map;
   }
 
   Map<String, dynamic> toJson() => {
-        "name": name,
+        "device_id": deviceId,
         "email": email,
         "password": password,
-        "password confirmation": passwordConfirmation,
       };
 }
 

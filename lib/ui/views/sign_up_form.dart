@@ -13,14 +13,12 @@ class SignUpForm extends StatefulWidget {
 class _State extends State<SignUpForm> {
   final GlobalKey<ScaffoldState> _scaffoldstate =
       new GlobalKey<ScaffoldState>();
-  TextEditingController passwordConfirmationController =
-      new TextEditingController();
 
   GlobalKey<FormState> form = GlobalKey<FormState>();
   static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
-  TextEditingController nameController = new TextEditingController();
+  TextEditingController deviceIdController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,24 +34,17 @@ class _State extends State<SignUpForm> {
                 appBar: new AppBar(
                   title: new Text('Sign Up'),
                 ),
-                body: _getListUi(
-                    model,
-                    _formKey,
-                    emailController,
-                    passwordController,
-                    nameController,
-                    passwordConfirmationController,
-                    context)));
+                body: _getListUi(model, _formKey, emailController,
+                    passwordController, deviceIdController, context)));
   }
 }
 
 Widget _getListUi(
     AuthServiceModel model,
     GlobalKey<FormState> formKey,
-    TextEditingController nameController,
     TextEditingController emailController,
     TextEditingController passwordController,
-    TextEditingController passwordConfirmationController,
+    TextEditingController deviceIdController,
     BuildContext context) {
   return Container(
     margin: const EdgeInsets.all(20.0),
@@ -63,21 +54,6 @@ Widget _getListUi(
         children: <Widget>[
           SizedBox(
             height: 10.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 15.0),
-            child: FormInput(
-              validator: (value) =>
-                  Validators(name: 'Name', value: value).compose([
-                Validators.required,
-              ]),
-              controller: nameController,
-              icon: FontAwesomeIcons.expand,
-              hintText: "Name",
-              obscureText: false,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
-            ),
           ),
           FormInput(
             validator: (value) =>
@@ -107,20 +83,16 @@ Widget _getListUi(
             padding: const EdgeInsets.only(top: 15.0),
             child: FormInput(
               validator: (value) =>
-                  Validators(name: 'Password Confirmation', value: value)
-                      .compose([
+                  Validators(name: 'device id', value: value).compose([
                 Validators.required,
               ]),
-              controller: passwordConfirmationController,
+              controller: deviceIdController,
               icon: FontAwesomeIcons.expand,
-              hintText: "Password Confirmation",
-              obscureText: true,
+              hintText: "device id",
+              obscureText: false,
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.done,
             ),
-          ),
-          SizedBox(
-            height: 10.0,
           ),
           SizedBox(
             height: 10.0,
@@ -137,11 +109,11 @@ Widget _getListUi(
                 formKey.currentState.save();
                 if (!formKey.currentState.validate()) return;
                 var loginSuccess = await model.signUp(
-                    nameController.text,
-                    emailController.text,
-                    passwordController.text,
-                    passwordConfirmationController.text,
-                    context);
+                  email: emailController.text,
+                  context: context,
+                  password: passwordController.text,
+                  deviceId: deviceIdController.text,
+                );
               },
               child: Text(
                 "Create Account",

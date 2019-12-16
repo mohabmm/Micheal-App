@@ -32,16 +32,18 @@ class AuthServiceModel extends BaseModel {
     return success;
   }
 
-  Future signUp(String userName, String email, String password,
-      String passwordConfirmation, BuildContext context) async {
+  Future signUp(
+      {String deviceId,
+      String email,
+      String password,
+      BuildContext context}) async {
     setState(ViewState.Busy);
     var success;
 
     UserSignUpData data = new UserSignUpData(
-      name: userName,
+      deviceId: deviceId,
       email: email,
       password: password,
-      passwordConfirmation: passwordConfirmation,
     );
 
     try {
