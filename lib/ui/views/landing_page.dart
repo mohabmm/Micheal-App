@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testmovie/core/viewmodels/authntication_model.dart';
+
 import 'base_widget.dart';
 
 class LandingPage extends StatelessWidget {
@@ -36,7 +37,7 @@ Widget _getListUi(BuildContext context, AuthServiceModel model) {
   return Container(
     decoration: new BoxDecoration(
       image: new DecorationImage(
-        image: new AssetImage("assets/images/avengers.jpg"),
+        image: new AssetImage("assets/images/intro.jpg"),
         fit: BoxFit.cover,
       ),
     ),

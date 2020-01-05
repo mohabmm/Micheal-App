@@ -1,28 +1,30 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testmovie/core/models/all_movies_ticket.dart';
-import 'package:testmovie/core/models/tmdb_models.dart';
 import 'package:testmovie/core/models/main_data.dart';
 import 'package:testmovie/core/services/api/api.dart';
-import 'package:testmovie/ui/utilities/show_snack_bar.dart';
 import '../../service_locator.dart';
 import '../enums/viewstate.dart';
 import 'base_model.dart';
 
 class HomeViewModel extends BaseModel {
-  HomeViewModel() {
-    getMovies();
-  }
-
+  GoogleMapController mapController;
+  Map<MarkerId, Marker> markers = {};
+  Map<PolylineId, Polyline> polylines = {};
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
   var api = locator<Api>();
-  List<MainData> posts;
+
+  List<MainData> mainData = new List();
   SharedPreferences sharedPreferences;
 
-  Future getMovies() async {
-    setState(ViewState.Busy); // If null indicate we're still fetching
-    posts = await api.getMainData();
-    setState(ViewState.DataFetched);
+  getHomeData(String apiKey) {
+    Timer timer;
+
+    timer = Timer.periodic(
+        Duration(seconds: 10), (Timer t) => startingData(apiKey));
   }
 
   signOut(context) async {
@@ -30,25 +32,78 @@ class HomeViewModel extends BaseModel {
     sharedPreferences.clear();
     Navigator.pushNamed(context, 'landing');
   }
-//
-//  Future createMovieTicket(
-//    BuildContext context, {
-//    userName,
-//    seats,
-//    dateTime,
-//  }) async {
-//    MainData data = new MainData(
-//      device_id: userName,
-//      temperature_c: seats,
-//      pulse_rate: dateTime,
-//    );
-//
-//    var success;
-//    try {
-//      success = await api.getMainData();
-//    } catch (e) {
-//      showSnackBar("Can't Create Movie Issue" + e.toString());
-//      success = false;
-//    }
-//  }
+
+  onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    notifyListeners();
+  }
+
+  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
+    MarkerId markerId = MarkerId(id);
+    Marker marker =
+        Marker(markerId: markerId, icon: descriptor, position: position);
+    markers[markerId] = marker;
+  }
+
+  void _chatChannelViewUpdated(List<MainData> chatChannelViewListData) {}
+
+  getIntialMapCordinates(String source_long, String source_lat,
+      String destination_long, String destination_lat, String s) {
+    _addMarker(LatLng(double.parse(source_lat), double.parse(source_long)),
+        "origin", BitmapDescriptor.defaultMarker);
+
+    /// destination marker
+    _addMarker(
+        LatLng(double.parse(destination_lat), double.parse(destination_long)),
+        "destination",
+        BitmapDescriptor.defaultMarkerWithHue(90));
+    _getPolyline(s, source_lat, source_long, destination_lat, destination_long);
+  }
+
+  _getPolyline(String s, String source_lat, String_originLongitude,
+      String _destLatitude, String _destLongitude) async {
+    List<PointLatLng> result = await polylinePoints.getRouteBetweenCoordinates(
+        s,
+        double.parse(source_lat),
+        double.parse(String_originLongitude),
+        double.parse(_destLatitude),
+        double.parse(_destLongitude));
+    if (result.isNotEmpty) {
+      result.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    }
+    _addPolyLine();
+  }
+
+  _addPolyLine() {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+        polylineId: id, color: Colors.red, points: polylineCoordinates);
+    polylines[id] = polyline;
+    notifyListeners();
+  }
+
+  startingData(String apiKey) {
+    mainData = [];
+    api.getMainData().then((onValue) {
+      if (onValue == null) {
+        setState(ViewState.Error); // If null indicate we're still fetching
+      } else if (onValue.length == 0) {
+        setState(ViewState.NoDataAvailable);
+      } else {
+        mainData.addAll(onValue);
+        for (int i = 0; i < mainData.length; i++) {
+          getIntialMapCordinates(
+            mainData[i].source_long,
+            mainData[i].source_lat,
+            mainData[i].destination_long,
+            mainData[i].destination_lat,
+            apiKey,
+          );
+        }
+        setState(ViewState.DataFetched);
+      }
+    });
+  }
 }

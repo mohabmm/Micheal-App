@@ -3,11 +3,13 @@ class MainData {
   String temperature_c;
   String pulse_rate;
   String blood_oxygen;
-  String location_long;
-  String location_lat;
+  String source_long;
+  String destination_long;
+  String source_lat;
+  String destination_lat;
   String alcohol_detection;
-  String picture_ref;
-  String picture_description;
+  String picture_pupil_ref;
+  String picture_face_ref;
   String record_date;
   String is_available;
 
@@ -16,11 +18,13 @@ class MainData {
     this.temperature_c,
     this.pulse_rate,
     this.blood_oxygen,
-    this.location_long,
-    this.location_lat,
+    this.source_long,
+    this.destination_long,
+    this.source_lat,
+    this.destination_lat,
     this.alcohol_detection,
-    this.picture_ref,
-    this.picture_description,
+    this.picture_pupil_ref,
+    this.picture_face_ref,
     this.record_date,
     this.is_available,
   });
@@ -30,11 +34,13 @@ class MainData {
         temperature_c: json["temperature_c"],
         pulse_rate: json["pulse_rate"],
         blood_oxygen: json["blood_oxygen"],
-        location_long: json["location_long"],
-        location_lat: json["location_lat"],
+        source_long: json["source_long"],
+        destination_long: json["destination_long"],
+        source_lat: json["source_lat"],
+        destination_lat: json["destination_lat"],
         alcohol_detection: json["alcohol_detection"],
-        picture_ref: json["picture_ref"],
-        picture_description: json["picture_description"],
+        picture_pupil_ref: json["picture_pupil_ref"],
+        picture_face_ref: json["picture_face_ref"],
         record_date: json["record_date"],
         is_available: json["is_available"],
       );
@@ -46,12 +52,15 @@ class MainData {
     map["pulse_rate"] = pulse_rate;
     map['blood_oxygen'] = blood_oxygen;
 
-    map["location_long"] = location_long;
-    map["location_lat"] = location_lat;
-    map["alcohol_detection"] = alcohol_detection;
-    map['picture_ref'] = picture_ref;
+    map["source_long"] = source_long;
+    map["destination_long"] = destination_long;
+    map["source_lat"] = source_lat;
+    map["destination_lat"] = destination_lat;
 
-    map["picture_description"] = picture_description;
+    map["alcohol_detection"] = alcohol_detection;
+    map['picture_pupil_ref'] = picture_pupil_ref;
+
+    map["picture_face_ref"] = picture_face_ref;
     map["record_date"] = record_date;
     map["is_available"] = is_available;
 
@@ -63,11 +72,13 @@ class MainData {
         "seats": temperature_c,
         "date_time": pulse_rate,
         "id": blood_oxygen,
-        "location_long": location_long,
-        "location_lat": location_lat,
+        "source_long": source_long,
+        "destination_long": destination_long,
+        "source_lat": source_lat,
+        "destination_lat": destination_lat,
         "alcohol_detection": alcohol_detection,
-        "picture_ref": picture_ref,
-        "picture_description": picture_description,
+        "picture_pupil_ref": picture_pupil_ref,
+        "picture_face_ref": picture_face_ref,
         "record_date": record_date,
         "is_available": is_available,
       };

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flashbar/flashbar.dart';
+import 'package:flutter/material.dart';
 
 class ScaffoldService {
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -7,6 +7,7 @@ class ScaffoldService {
   BuildContext get context => navigatorKey.currentState.overlay.context;
 
   ScaffoldState get scaffoldState => Scaffold.of(context);
+
   showSnackBar(Widget child) {
     showFlashbar(
       context: context,

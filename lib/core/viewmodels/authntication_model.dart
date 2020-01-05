@@ -4,6 +4,7 @@ import 'package:testmovie/core/models/login.dart';
 import 'package:testmovie/core/models/registiration_data.dart';
 import 'package:testmovie/core/services/api/api.dart';
 import 'package:testmovie/ui/utilities/show_snack_bar.dart';
+
 import '../../service_locator.dart';
 import 'base_model.dart';
 

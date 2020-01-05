@@ -6,6 +6,7 @@ class BaseWidget<T extends ChangeNotifier> extends StatefulWidget {
   final T model;
   final Widget child;
   final Function(T) onModelReady;
+  final Function(T) onChange;
 
   BaseWidget({
     Key key,
@@ -13,6 +14,7 @@ class BaseWidget<T extends ChangeNotifier> extends StatefulWidget {
     this.model,
     this.child,
     this.onModelReady,
+    this.onChange,
   }) : super(key: key);
 
   _BaseWidgetState<T> createState() => _BaseWidgetState<T>();
@@ -30,6 +32,16 @@ class _BaseWidgetState<T extends ChangeNotifier> extends State<BaseWidget<T>> {
     }
 
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    model = widget.model;
+
+    if (widget.onChange != null) {
+      widget.onChange(model);
+    }
+    super.didChangeDependencies();
   }
 
   @override

@@ -1,8 +1,12 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:testmovie/core/enums/viewstate.dart';
 import 'package:testmovie/core/viewmodels/home_view_model.dart';
-import 'package:testmovie/ui/widgets/top_part.dart';
+import 'package:testmovie/ui/views/map_view.dart';
+import 'package:testmovie/ui/widgets/login_button.dart';
 import 'base_widget.dart';
 
 class HomeView extends StatelessWidget {
@@ -10,6 +14,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseWidget<HomeViewModel>(
         model: HomeViewModel(),
+        onModelReady: (model) =>
+            model.getHomeData("AIzaSyAvj5r2iScc7QEJLr3y1gIRLllMXgvsUdk"),
         builder: (
           context,
           model,
@@ -84,57 +90,89 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _getListUi(HomeViewModel model, BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: new Text('Driver Data')),
-      body: ListView(
-        children: <Widget>[
-          Container(
-            height: 250,
-            child:
+    return Center(
+      child: Scaffold(
+        appBar: AppBar(title: new Text('Driver Data')),
+        body: Center(
+          child: new ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: model.mainData.length,
+              itemBuilder: (BuildContext context, int index) {
+                String deviceId = model.mainData[index].device_id;
+                String alcoholDetection =
+                    model.mainData[index].alcohol_detection;
+                String bloodOxygen = model.mainData[index].blood_oxygen;
+                String sourceLong = model.mainData[index].source_long;
+                String sourceLat = model.mainData[index].source_lat;
+                String destinationLong = model.mainData[index].destination_long;
+                String destinationLat = model.mainData[index].destination_lat;
 
-//            new Text("a7a"),
-                new ListView.builder(
-                    itemExtent: 120.0,
-                    scrollDirection: Axis.vertical,
-                    itemCount: model.posts.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      String deviceId = model.posts[index].device_id;
-                      String alcoholDetection =
-                          model.posts[index].alcohol_detection;
-                      String bloodOxygen = model.posts[index].blood_oxygen;
-                      String latitude = model.posts[index].location_lat;
-                      String longitude = model.posts[index].location_long;
-                      String imageDescription =
-                          model.posts[index].picture_description;
-                      String pictureRef = model.posts[index].picture_ref;
-                      String pulseRate = model.posts[index].pulse_rate;
-                      String temperature = model.posts[index].temperature_c;
+                String picture_pupil_ref =
+                    model.mainData[index].picture_pupil_ref;
+                String picture_face_ref =
+                    model.mainData[index].picture_face_ref;
+                String pulseRate = model.mainData[index].pulse_rate;
+                String temperature = model.mainData[index].temperature_c;
 
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 12.0),
-                        child: Container(
-                          height: 400.0,
-                          width: 135.0,
-                          child: Column(
-                            children: <Widget>[
-                              new Text(deviceId),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 4.0, left: 8.0, right: 8.0),
-                                child: Text(bloodOxygen,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontFamily: "SF-Pro-Display-Bold")),
+                return Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        new LoginButton(
+                          text: "Press To Track The Driver Location",
+                          color: Colors.grey,
+                          loginMethod: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    MapViewScreen(sourceLat, sourceLong),
                               ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                      );
-                    }),
-          ),
-        ],
+                        new Text("Temperature" + ":" + temperature),
+                        new Text("Device Id" + ":" + deviceId),
+                        new Text("alcohol Detection" + ":" + alcoholDetection),
+                        new Text("Pulse Rate" + ":" + pulseRate),
+                        new Text("blood Oxygen" + ":" + bloodOxygen),
+                        new SizedBox(
+                          height: 20,
+                        ),
+                        (picture_pupil_ref != null && picture_pupil_ref != '')
+                            ? new Image.network(picture_pupil_ref)
+                            : new Container(
+                                height: 1,
+                              ),
+                        new SizedBox(
+                          height: 10,
+                        ),
+                        (picture_pupil_ref != null && picture_pupil_ref != '')
+                            ? new Text("Pupil Detection")
+                            : new Container(
+                                height: 1,
+                              ),
+                        (picture_face_ref != null && picture_face_ref != '')
+                            ? new Image.network(picture_face_ref)
+                            : new Container(
+                                height: 1,
+                              ),
+                        new SizedBox(
+                          height: 10,
+                        ),
+                        (picture_face_ref != null && picture_face_ref != '')
+                            ? new Text("Face Detection")
+                            : new Container(
+                                height: 1,
+                              ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+        ),
       ),
     );
   }

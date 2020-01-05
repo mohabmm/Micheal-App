@@ -17,6 +17,7 @@ class FormInput extends StatefulWidget {
   final TextInputAction textInputAction;
   final String initialValue;
   final bool autoValidate;
+
   FormInput({
     this.controller,
     this.onChanged,

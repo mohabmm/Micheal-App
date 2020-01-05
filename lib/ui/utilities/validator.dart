@@ -17,7 +17,9 @@ class Validators {
   final String name;
   final String value;
   final ValidationMessages messages = ValidationMessages();
+
   Validators({@Meta.required this.name, @Meta.required this.value});
+
   static Validator required(String value) {
     if (value.isEmpty) {
       return Validator.Required;
