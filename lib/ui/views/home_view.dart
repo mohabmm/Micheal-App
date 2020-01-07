@@ -14,8 +14,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseWidget<HomeViewModel>(
         model: HomeViewModel(),
-        onModelReady: (model) =>
-            model.getHomeData("AIzaSyAvj5r2iScc7QEJLr3y1gIRLllMXgvsUdk"),
+        onModelReady: (model) => model.getHomeData("use your api key here "),
         builder: (
           context,
           model,
@@ -107,6 +106,7 @@ class HomeView extends StatelessWidget {
                 String destinationLong = model.mainData[index].destination_long;
                 String destinationLat = model.mainData[index].destination_lat;
 
+                String hazim = "";
                 String picture_pupil_ref =
                     model.mainData[index].picture_pupil_ref;
                 String picture_face_ref =
@@ -133,7 +133,9 @@ class HomeView extends StatelessWidget {
                             );
                           },
                         ),
-                        new Text("Temperature" + ":" + temperature),
+                        new Text(
+                          "Temperature" + ":" + temperature,
+                        ),
                         new Text("Device Id" + ":" + deviceId),
                         new Text("alcohol Detection" + ":" + alcoholDetection),
                         new Text("Pulse Rate" + ":" + pulseRate),
