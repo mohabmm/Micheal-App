@@ -12,7 +12,7 @@
         android:label="DMVTS">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="use your api key here " />
+            android:value="AIzaSyAvj5r2iScc7QEJLr3y1gIRLllMXgvsUdk" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

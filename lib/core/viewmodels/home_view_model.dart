@@ -16,7 +16,8 @@ class HomeViewModel extends BaseModel {
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
   var api = locator<Api>();
-
+  String tempImage;
+  String tempImagePictureFaceRef;
   List<MainData> mainData = new List();
   SharedPreferences sharedPreferences;
 
@@ -24,7 +25,7 @@ class HomeViewModel extends BaseModel {
     Timer timer;
 
     timer = Timer.periodic(
-        Duration(seconds: 10), (Timer t) => startingData(apiKey));
+        Duration(seconds: 20), (Timer t) => startingData(apiKey));
   }
 
   signOut(context) async {
@@ -49,8 +50,12 @@ class HomeViewModel extends BaseModel {
 
   getIntialMapCordinates(String source_long, String source_lat,
       String destination_long, String destination_lat, String s) {
-    _addMarker(LatLng(double.parse(source_lat), double.parse(source_long)),
-        "origin", BitmapDescriptor.defaultMarker);
+    if (source_lat == "SOURCE lattitude") {
+//      print("do no thing");
+    } else {
+      _addMarker(LatLng(double.parse(source_lat), double.parse(source_long)),
+          "origin", BitmapDescriptor.defaultMarker);
+    }
 
     /// destination marker
     _addMarker(
@@ -62,18 +67,23 @@ class HomeViewModel extends BaseModel {
 
   _getPolyline(String s, String source_lat, String_originLongitude,
       String _destLatitude, String _destLongitude) async {
-    List<PointLatLng> result = await polylinePoints.getRouteBetweenCoordinates(
-        s,
-        double.parse(source_lat),
-        double.parse(String_originLongitude),
-        double.parse(_destLatitude),
-        double.parse(_destLongitude));
-    if (result.isNotEmpty) {
-      result.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+    if (source_lat != "SOURCE lattitude") {
+      List<PointLatLng> result =
+          await polylinePoints.getRouteBetweenCoordinates(
+              s,
+              double.parse(source_lat),
+              double.parse(String_originLongitude),
+              double.parse(_destLatitude),
+              double.parse(_destLongitude));
+      if (result.isNotEmpty) {
+        result.forEach((PointLatLng point) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        });
+      }
+      _addPolyLine();
+    } else {
+//      print("all is well");
     }
-    _addPolyLine();
   }
 
   _addPolyLine() {
@@ -105,5 +115,30 @@ class HomeViewModel extends BaseModel {
         setState(ViewState.DataFetched);
       }
     });
+  }
+
+  checkImages(String ImageToCheck) {
+    if (ImageToCheck != null && ImageToCheck != "") {
+      tempImage = ImageToCheck;
+      notifyListeners();
+      return "real";
+    } else if (tempImage != null && tempImage != "") {
+      return "temp";
+    } else {
+      return "a7a";
+    }
+  }
+
+  checkImagesPictureFaceRef(String picture_face_ref) {
+    if (picture_face_ref != null && picture_face_ref != "") {
+      tempImagePictureFaceRef = picture_face_ref;
+      notifyListeners();
+      return "realImage";
+    } else if (tempImagePictureFaceRef != null &&
+        tempImagePictureFaceRef != "") {
+      return "tempImage";
+    } else {
+      return "a7aImage";
+    }
   }
 }

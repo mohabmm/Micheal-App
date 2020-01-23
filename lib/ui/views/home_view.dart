@@ -1,10 +1,8 @@
-import 'dart:collection';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:testmovie/core/enums/viewstate.dart';
 import 'package:testmovie/core/viewmodels/home_view_model.dart';
+import 'package:testmovie/ui/utilities/show_snack_bar.dart';
 import 'package:testmovie/ui/views/map_view.dart';
 import 'package:testmovie/ui/widgets/login_button.dart';
 import 'base_widget.dart';
@@ -14,7 +12,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseWidget<HomeViewModel>(
         model: HomeViewModel(),
-        onModelReady: (model) => model.getHomeData("use your api key here "),
+        onModelReady: (model) =>
+            model.getHomeData("AIzaSyAvj5r2iScc7QEJLr3y1gIRLllMXgvsUdk"),
         builder: (
           context,
           model,
@@ -105,8 +104,6 @@ class HomeView extends StatelessWidget {
                 String sourceLat = model.mainData[index].source_lat;
                 String destinationLong = model.mainData[index].destination_long;
                 String destinationLat = model.mainData[index].destination_lat;
-
-                String hazim = "";
                 String picture_pupil_ref =
                     model.mainData[index].picture_pupil_ref;
                 String picture_face_ref =
@@ -124,43 +121,71 @@ class HomeView extends StatelessWidget {
                           text: "Press To Track The Driver Location",
                           color: Colors.grey,
                           loginMethod: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    MapViewScreen(sourceLat, sourceLong),
-                              ),
-                            );
+                            (sourceLat == "SOURCE lattitude")
+                                ? showSnackBar(
+                                    "Location is not available waiting for the service",
+                                  )
+                                : Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          MapViewScreen(sourceLat, sourceLong),
+                                    ),
+                                  );
                           },
                         ),
-                        new Text(
-                          "Temperature" + ":" + temperature,
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            new Text(
+                              "Temperature" + ":" + temperature,
+                            ),
+                            SizedBox(width: 7),
+                            new Text("Device Id" + ":" + deviceId),
+                          ],
                         ),
-                        new Text("Device Id" + ":" + deviceId),
-                        new Text("alcohol Detection" + ":" + alcoholDetection),
-                        new Text("Pulse Rate" + ":" + pulseRate),
-                        new Text("blood Oxygen" + ":" + bloodOxygen),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            new Text(
+                                "Alcohol Detection" + ":" + alcoholDetection),
+                            SizedBox(width: 7),
+                            new Text("Pulse Rate" + ":" + pulseRate),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        new Text("Blood Oxygen" + ":" + bloodOxygen),
                         new SizedBox(
                           height: 20,
                         ),
-                        (picture_pupil_ref != null && picture_pupil_ref != '')
+                        (model.checkImages(picture_pupil_ref) == "real")
                             ? new Image.network(picture_pupil_ref)
-                            : new Container(
-                                height: 1,
-                              ),
+                            : (model.checkImages(picture_pupil_ref) == "temp")
+                                ? new Image.network(model.tempImage)
+                                : new Text("No eye detected"),
                         new SizedBox(
                           height: 10,
                         ),
                         (picture_pupil_ref != null && picture_pupil_ref != '')
-                            ? new Text("Pupil Detection")
+                            ? new Text("Eye Detection")
                             : new Container(
                                 height: 1,
                               ),
-                        (picture_face_ref != null && picture_face_ref != '')
+                        (model.checkImagesPictureFaceRef(picture_face_ref) ==
+                                "realImage")
                             ? new Image.network(picture_face_ref)
-                            : new Container(
-                                height: 1,
-                              ),
+                            : (model.checkImages(picture_face_ref) ==
+                                    "tempImage")
+                                ? new Image.network(
+                                    model.tempImagePictureFaceRef)
+                                : new Text("No face deteted"),
                         new SizedBox(
                           height: 10,
                         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testmovie/service_locator.dart';
 import 'package:testmovie/ui/router.dart';
-
 import 'core/services/api/scaffold_service.dart';
 
 void main() {

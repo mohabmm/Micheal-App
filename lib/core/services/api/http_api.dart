@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +11,7 @@ import 'package:testmovie/core/models/main_data.dart';
 import 'package:testmovie/core/models/registiration_data.dart';
 import 'package:testmovie/core/services/api/api.dart';
 import 'package:testmovie/ui/utilities/show_snack_bar.dart';
+import 'package:testmovie/ui/views/home_view.dart';
 
 class HttpApi implements Api {
   static const apiKey = "f1d1160278adc1fdc71f931acee39cb0";
@@ -74,8 +76,11 @@ class HttpApi implements Api {
       print("the token is " + token);
       if (statusCode == 200) {
         showSnackBar('User Registered Successfully ');
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomeView()),
+            (Route<dynamic> route) => false);
 
-        Navigator.pushReplacementNamed(context, 'homeview');
+//        Navigator.pushReplacementNamed(context, 'homeview');
         return;
       } else if (statusCode < 200 || statusCode > 400 || json == null) {
         print("error found");
