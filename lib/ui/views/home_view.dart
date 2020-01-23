@@ -13,7 +13,7 @@ class HomeView extends StatelessWidget {
     return BaseWidget<HomeViewModel>(
         model: HomeViewModel(),
         onModelReady: (model) =>
-            model.getHomeData("AIzaSyAvj5r2iScc7QEJLr3y1gIRLllMXgvsUdk"),
+            model.getHomeData(""),
         builder: (
           context,
           model,
