@@ -14,26 +14,23 @@ import 'package:testmovie/ui/utilities/show_snack_bar.dart';
 import 'package:testmovie/ui/views/home_view.dart';
 
 class HttpApi implements Api {
-  static const apiKey = "f1d1160278adc1fdc71f931acee39cb0";
+  static const apiKey = "";
 
   StreamController<List<MainData>> mainItemsController = new BehaviorSubject();
 
   Stream<List<MainData>> get mainDataStream => mainItemsController.stream;
 
-  static const movieEndpoint =
-      'https://api.themoviedb.org/3/discover/movie?api_key=' +
-          apiKey +
-          '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1';
+  
   var client = new http.Client();
 
-  static const endpointLogin = 'http://54.183.229.104/signin.php';
-  static const endpointSignUp = 'http://54.183.229.104/signup.php';
+  static const endpointLogin = '';
+  static const endpointSignUp = '';
   static const getMainDataEndPoint =
-      'http://54.183.229.104/get_last_record.php';
+      '';
   static const codistaEndpointGetAllMovies =
-      'https://tasks.codista.co/api/tickets';
+      '';
   static const codistaEndpointGetSingleMovie =
-      'https://tasks.codista.co/api/tickets/';
+      '';
 
   final prefs = SharedPreferences.getInstance();
 
